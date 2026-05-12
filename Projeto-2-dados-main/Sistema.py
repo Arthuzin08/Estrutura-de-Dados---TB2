@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class Cliente:
     def __init__(self, id_cliente, nome, telefone, prioridade):
         self.id = id_cliente
@@ -23,3 +25,25 @@ class Atendente:
             "id": self.id,
             "nome": self.nome
         }
+
+class Atendimento:
+    def __init__(self, cliente, atendente):
+        self.cliente = cliente
+        self.atendente = atendente
+        self.inicio = datetime.now()
+        self.fim = None
+        self.duracao = None
+
+    def finalizar(self):
+        self.fim = datetime.now()
+        self.duracao = (self.fim - self.inicio).seconds
+
+    def to_dict(self):
+        return {
+            "cliente": self.cliente.nome,
+            "atendente": self.atendente.nome,
+            "inicio": str(self.inicio),
+            "fim": str(self.fim),
+            "duracao": self.duracao
+        }
+    
