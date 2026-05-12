@@ -70,3 +70,48 @@ class ListaEncadeada:
             atual = atual.proximo
 
         atual.proximo =      novo   
+
+    def remover(self, id_cliente):
+        atual = self.inicio
+        anterior = None
+
+        while atual:
+
+            if atual.cliente.id == id_cliente:
+
+                if anterior:
+                    anterior.proximo = atual.proximo
+                else:
+                    self.inicio = atual.proximo
+
+                return True
+
+            anterior = atual
+            atual = atual.proximo
+
+        return False
+
+    def listar(self):
+        atual = self.inicio
+
+        while atual:
+            print(
+                f"ID: {atual.cliente.id} | "
+                f"Nome: {atual.cliente.nome}"
+            )
+
+            atual = atual.proximo
+
+
+fila_prioridade = deque()
+fila_comum = deque()
+
+pilha_desfazer = []
+
+clientes = []
+atendentes = []
+historico = []
+
+clientes_ativos = ListaEncadeada()
+
+atendimento_atual = None
