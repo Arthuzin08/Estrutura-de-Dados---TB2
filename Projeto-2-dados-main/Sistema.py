@@ -548,3 +548,89 @@ def alerta_espera():
         print(
             "ALERTA: fila com tempo de espera alto"
         )
+
+def menu():
+
+    while True:
+
+        alerta_espera()
+
+        print("\n========== SISTEMA ==========")
+
+        print("1 - Cadastrar cliente")
+        print("2 - Cadastrar atendente")
+        print("3 - Abrir atendimento")
+        print("4 - Chamar próximo")
+        print("5 - Finalizar atendimento")
+        print("6 - Histórico cliente")
+        print("7 - Desfazer finalização")
+        print("8 - Remover cliente")
+        print("9 - Tempo médio")
+        print("10 - Top 5 clientes")
+        print("11 - Exportar CSV")
+        print("12 - Listar clientes ativos")
+        print("13 - Ordenar histórico")
+        print("0 - Sair")
+
+        opcao = input("Escolha: ")
+
+        if opcao == "1":
+            cadastrar_cliente()
+
+        elif opcao == "2":
+            cadastrar_atendente()
+
+        elif opcao == "3":
+            abrir_atendimento()
+
+        elif opcao == "4":
+            chamar_proximo()
+
+        elif opcao == "5":
+            finalizar_atendimento()
+
+        elif opcao == "6":
+            historico_cliente()
+
+        elif opcao == "7":
+            desfazer_ultima_finalizacao()
+
+        elif opcao == "8":
+            remover_cliente()
+
+        elif opcao == "9":
+            relatorio_tempo_medio()
+
+        elif opcao == "10":
+            top_5_clientes()
+
+        elif opcao == "11":
+            exportar_csv()
+
+        elif opcao == "12":
+            clientes_ativos.listar()
+
+        elif opcao == "13":
+
+            ordenado = merge_sort(historico)
+
+            print("\nHISTÓRICO ORDENADO")
+
+            for atendimento in ordenado:
+
+                print(
+                    f"{atendimento.cliente.nome} - "
+                    f"{atendimento.duracao}s"
+                )
+
+        elif opcao == "0":
+
+            print("Encerrando sistema")
+            break
+
+        else:
+            print("Opção inválida")
+
+
+
+menu()
