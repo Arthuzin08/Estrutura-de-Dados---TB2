@@ -1,3 +1,4 @@
+import json
 from collections import deque
 from datetime import datetime
 
@@ -116,3 +117,38 @@ historico = []
 clientes_ativos = ListaEncadeada()
 
 atendimento_atual = None
+
+def registrar_log(mensagem):
+
+    with open("logs.txt", "a", encoding="utf-8") as arquivo:
+
+        arquivo.write(
+            f"{datetime.now()} - {mensagem}\n"
+        )
+
+
+def salvar_dados():
+
+    with open("clientes.json", "w", encoding="utf-8") as arquivo:
+        json.dump(
+            [c.to_dict() for c in clientes],
+            arquivo,
+            indent=4,
+            ensure_ascii=False
+        )
+
+    with open("atendentes.json", "w", encoding="utf-8") as arquivo:
+        json.dump(
+            [a.to_dict() for a in atendentes],
+            arquivo,
+            indent=4,
+            ensure_ascii=False
+        )
+
+    with open("historico.json", "w", encoding="utf-8") as arquivo:
+        json.dump(
+            [h.to_dict() for h in historico],
+            arquivo,
+            indent=4,
+            ensure_ascii=False
+        )
