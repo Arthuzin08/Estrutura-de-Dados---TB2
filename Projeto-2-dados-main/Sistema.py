@@ -46,4 +46,27 @@ class Atendimento:
             "fim": str(self.fim),
             "duracao": self.duracao
         }
-    
+
+class No:
+    def __init__(self, cliente):
+        self.cliente = cliente
+        self.proximo = None
+
+
+class ListaEncadeada:
+    def __init__(self):
+        self.inicio = None
+
+    def adicionar(self, cliente):
+        novo = No(cliente)
+
+        if self.inicio is None:
+            self.inicio = novo
+            return
+
+        atual = self.inicio
+
+        while atual.proximo:
+            atual = atual.proximo
+
+        atual.proximo =      novo   
