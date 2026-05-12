@@ -1,3 +1,4 @@
+import csv
 import json
 from collections import deque
 from datetime import datetime
@@ -504,4 +505,46 @@ def top_5_clientes():
 
         print(
             f"{cliente} - {qtd} atendimentos"
+        )
+
+def exportar_csv():
+
+    with open(
+        "relatorio.csv",
+        "w",
+        newline="",
+        encoding="utf-8"
+    ) as arquivo:
+
+        writer = csv.writer(arquivo)
+
+        writer.writerow([
+            "Cliente",
+            "Atendente",
+            "Duração"
+        ])
+
+        for atendimento in historico:
+
+            writer.writerow([
+                atendimento.cliente.nome,
+                atendimento.atendente.nome,
+                atendimento.duracao
+            ])
+
+    print("CSV exportado")
+
+
+
+def alerta_espera():
+
+    total = (
+        len(fila_prioridade) +
+        len(fila_comum)
+    )
+
+    if total >= 5:
+
+        print(
+            "ALERTA: fila com tempo de espera alto"
         )
