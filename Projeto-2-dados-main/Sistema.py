@@ -297,3 +297,211 @@ def cadastrar_atendente():
 
     except:
         print("Erro ao cadastrar atendente")
+
+def abrir_atendimento():
+
+    try:
+
+        id_cliente = int(
+            input("ID do cliente: ")
+        )
+
+        cliente = busca_binaria(id_cliente)
+
+        if not cliente:
+            print("Cliente não encontrado")
+            return
+
+        if cliente.prioridade:
+            fila_prioridade.append(cliente)
+        else:
+            fila_comum.append(cliente)
+
+        registrar_log(
+            f"Cliente entrou na fila: {cliente.nome}"
+        )
+
+        print("Cliente adicionado na fila")
+
+    except:
+        print("Erro ao abrir atendimento")
+
+
+
+def chamar_proximo():
+
+    global atendimento_atual
+
+    if atendimento_atual:
+        print("Já existe atendimento em andamento")
+        return
+
+    if len(atendentes) == 0:
+        print("Nenhum atendente cadastrado")
+        return
+
+    if fila_prioridade:
+
+        cliente = fila_prioridade.popleft()
+
+    elif fila_comum:
+
+        cliente = fila_comum.popleft()
+
+    else:
+        print("Fila vazia")
+        return
+
+    atendente = atendentes[0]
+
+    atendimento_atual = Atendimento(
+        cliente,
+        atendente
+    )
+
+    registrar_log(
+        f"Início atendimento: {cliente.nome}"
+    )
+
+    print(
+        f"Atendendo cliente: {cliente.nome}"
+    )
+
+
+def finalizar_atendimento():
+
+    global atendimento_atual
+
+    if not atendimento_atual:
+        print("Nenhum atendimento em andamento")
+        return
+
+    atendimento_atual.finalizar()
+
+    historico.append(atendimento_atual)
+
+    pilha_desfazer.append(atendimento_atual)
+
+    registrar_log(
+        f"Atendimento finalizado: "
+        f"{atendimento_atual.cliente.nome}"
+    )
+
+    salvar_dados()
+
+    print("Atendimento finalizado")
+
+    atendimento_atual = None
+
+
+def desfazer_ultima_finalizacao():
+
+    if not pilha_desfazer:
+        print("Nada para desfazer")
+        return
+
+    ultimo = pilha_desfazer.pop()
+
+    historico.remove(ultimo)
+
+    registrar_log(
+        f"Desfeito atendimento: "
+        f"{ultimo.cliente.nome}"
+    )
+
+    print("Última finalização desfeita")
+
+
+
+def historico_cliente():
+
+    id_cliente = int(
+        input("ID do cliente: ")
+    )
+
+    cliente = busca_binaria(id_cliente)
+
+    if not cliente:
+        print("Cliente não encontrado")
+        return
+
+    encontrados = []
+
+    for atendimento in historico:
+
+        if atendimento.cliente.id == cliente.id:
+            encontrados.append(atendimento)
+
+    if not encontrados:
+        print("Nenhum histórico")
+        return
+
+    imprimir_historico_recursivo(encontrados)
+
+def remover_cliente():
+
+    id_cliente = int(
+        input("ID do cliente: ")
+    )
+
+    if atendimento_atual:
+
+        if atendimento_atual.cliente.id == id_cliente:
+            print(
+                "Cliente possui atendimento aberto"
+            )
+            return
+
+    removido = clientes_ativos.remover(
+        id_cliente
+    )
+
+    if removido:
+        print("Cliente removido")
+    else:
+        print("Cliente não encontrado")
+
+
+def relatorio_tempo_medio():
+
+    if len(historico) == 0:
+        print("Sem histórico")
+        return
+
+    soma = 0
+
+    for atendimento in historico:
+        soma += atendimento.duracao
+
+    media = soma / len(historico)
+
+    print(
+        f"Tempo médio: {media:.2f} segundos"
+    )
+
+
+def top_5_clientes():
+
+    contador = {}
+
+    for atendimento in historico:
+
+        nome = atendimento.cliente.nome
+
+        contador[nome] = (
+            contador.get(nome, 0) + 1
+        )
+
+    ranking = sorted(
+        contador.items(),
+        key=lambda x: x[1],
+        reverse=True
+    )
+
+    print("\nTOP 5 CLIENTES")
+
+    for cliente, qtd in ranking[:5]:
+
+        print(
+            f"{cliente} - {qtd} atendimentos"
+        )
