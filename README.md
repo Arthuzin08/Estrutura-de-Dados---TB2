@@ -230,5 +230,5 @@ Alunos: Arthur Lima;
         Fredson Vicente;
         Gustavo Dias;
         Igor Medeiros;
-        Lucas Libanio;
+        Lucas Libanio.
 
